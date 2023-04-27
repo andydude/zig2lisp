@@ -1,0 +1,7 @@
+#!/usr/bin/env python
+# -*- mode: python; -*-
+from ds_write_zig.main import main
+
+
+if __name__ == '__main__':
+    main()
