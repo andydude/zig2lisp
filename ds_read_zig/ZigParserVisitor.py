@@ -14,8 +14,128 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#members.
-    def visitMembers(self, ctx:ZigParser.MembersContext):
+    # Visit a parse tree produced by ZigParser#primaryTypeExpression.
+    def visitPrimaryTypeExpression(self, ctx:ZigParser.PrimaryTypeExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#primaryExpression.
+    def visitPrimaryExpression(self, ctx:ZigParser.PrimaryExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#asmExpression.
+    def visitAsmExpression(self, ctx:ZigParser.AsmExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#asmOutput.
+    def visitAsmOutput(self, ctx:ZigParser.AsmOutputContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#asmOutputItem.
+    def visitAsmOutputItem(self, ctx:ZigParser.AsmOutputItemContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#asmInput.
+    def visitAsmInput(self, ctx:ZigParser.AsmInputContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#asmInputItem.
+    def visitAsmInputItem(self, ctx:ZigParser.AsmInputItemContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#asmClobbers.
+    def visitAsmClobbers(self, ctx:ZigParser.AsmClobbersContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#asmOutputList.
+    def visitAsmOutputList(self, ctx:ZigParser.AsmOutputListContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#asmInputList.
+    def visitAsmInputList(self, ctx:ZigParser.AsmInputListContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#suffixExpression.
+    def visitSuffixExpression(self, ctx:ZigParser.SuffixExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#designatorExpression.
+    def visitDesignatorExpression(self, ctx:ZigParser.DesignatorExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#fnCallArguments.
+    def visitFnCallArguments(self, ctx:ZigParser.FnCallArgumentsContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#argumentExpressionList.
+    def visitArgumentExpressionList(self, ctx:ZigParser.ArgumentExpressionListContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#compoundLiteral.
+    def visitCompoundLiteral(self, ctx:ZigParser.CompoundLiteralContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#expression.
+    def visitExpression(self, ctx:ZigParser.ExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#boolOrExpression.
+    def visitBoolOrExpression(self, ctx:ZigParser.BoolOrExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#boolAndExpression.
+    def visitBoolAndExpression(self, ctx:ZigParser.BoolAndExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#compareExpression.
+    def visitCompareExpression(self, ctx:ZigParser.CompareExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#bitwiseExpression.
+    def visitBitwiseExpression(self, ctx:ZigParser.BitwiseExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#bitShiftExpression.
+    def visitBitShiftExpression(self, ctx:ZigParser.BitShiftExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#additionExpression.
+    def visitAdditionExpression(self, ctx:ZigParser.AdditionExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#multiplyExpression.
+    def visitMultiplyExpression(self, ctx:ZigParser.MultiplyExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#prefixExpression.
+    def visitPrefixExpression(self, ctx:ZigParser.PrefixExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#constantExpression.
+    def visitConstantExpression(self, ctx:ZigParser.ConstantExpressionContext):
         return self.visitChildren(ctx)
 
 
@@ -24,38 +144,18 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#testDecl.
-    def visitTestDecl(self, ctx:ZigParser.TestDeclContext):
+    # Visit a parse tree produced by ZigParser#topVarDeclaration.
+    def visitTopVarDeclaration(self, ctx:ZigParser.TopVarDeclarationContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#comptimeDecl.
-    def visitComptimeDecl(self, ctx:ZigParser.ComptimeDeclContext):
+    # Visit a parse tree produced by ZigParser#fnProtoDeclarationEx.
+    def visitFnProtoDeclarationEx(self, ctx:ZigParser.FnProtoDeclarationExContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#decl.
-    def visitDecl(self, ctx:ZigParser.DeclContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#fnProtoDeclEx.
-    def visitFnProtoDeclEx(self, ctx:ZigParser.FnProtoDeclExContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#varDeclEx.
-    def visitVarDeclEx(self, ctx:ZigParser.VarDeclExContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#decl2.
-    def visitDecl2(self, ctx:ZigParser.Decl2Context):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#fnProto.
-    def visitFnProto(self, ctx:ZigParser.FnProtoContext):
+    # Visit a parse tree produced by ZigParser#varDeclarationEx.
+    def visitVarDeclarationEx(self, ctx:ZigParser.VarDeclarationExContext):
         return self.visitChildren(ctx)
 
 
@@ -64,13 +164,43 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#varDecl.
-    def visitVarDecl(self, ctx:ZigParser.VarDeclContext):
+    # Visit a parse tree produced by ZigParser#varDeclaration.
+    def visitVarDeclaration(self, ctx:ZigParser.VarDeclarationContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#fieldName.
-    def visitFieldName(self, ctx:ZigParser.FieldNameContext):
+    # Visit a parse tree produced by ZigParser#varDeclarationSpecifiers.
+    def visitVarDeclarationSpecifiers(self, ctx:ZigParser.VarDeclarationSpecifiersContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#typeName.
+    def visitTypeName(self, ctx:ZigParser.TypeNameContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#containerDeclaration.
+    def visitContainerDeclaration(self, ctx:ZigParser.ContainerDeclarationContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#containerDeclarationAuto.
+    def visitContainerDeclarationAuto(self, ctx:ZigParser.ContainerDeclarationAutoContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#containerDeclarationType.
+    def visitContainerDeclarationType(self, ctx:ZigParser.ContainerDeclarationTypeContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#structOrUnionSpecifier.
+    def visitStructOrUnionSpecifier(self, ctx:ZigParser.StructOrUnionSpecifierContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#fieldList.
+    def visitFieldList(self, ctx:ZigParser.FieldListContext):
         return self.visitChildren(ctx)
 
 
@@ -79,98 +209,273 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#stmt.
-    def visitStmt(self, ctx:ZigParser.StmtContext):
+    # Visit a parse tree produced by ZigParser#fieldDeclarationSpecifiers.
+    def visitFieldDeclarationSpecifiers(self, ctx:ZigParser.FieldDeclarationSpecifiersContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#elseStmt.
-    def visitElseStmt(self, ctx:ZigParser.ElseStmtContext):
+    # Visit a parse tree produced by ZigParser#fieldName.
+    def visitFieldName(self, ctx:ZigParser.FieldNameContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#ifStmt.
-    def visitIfStmt(self, ctx:ZigParser.IfStmtContext):
+    # Visit a parse tree produced by ZigParser#enumSpecifier.
+    def visitEnumSpecifier(self, ctx:ZigParser.EnumSpecifierContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#labeledStmt.
-    def visitLabeledStmt(self, ctx:ZigParser.LabeledStmtContext):
+    # Visit a parse tree produced by ZigParser#fnProtoDeclaration.
+    def visitFnProtoDeclaration(self, ctx:ZigParser.FnProtoDeclarationContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#loopStmt.
-    def visitLoopStmt(self, ctx:ZigParser.LoopStmtContext):
+    # Visit a parse tree produced by ZigParser#fnProtoDeclarationSpecifiers.
+    def visitFnProtoDeclarationSpecifiers(self, ctx:ZigParser.FnProtoDeclarationSpecifiersContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#forStmt.
-    def visitForStmt(self, ctx:ZigParser.ForStmtContext):
+    # Visit a parse tree produced by ZigParser#parameterDeclarationList.
+    def visitParameterDeclarationList(self, ctx:ZigParser.ParameterDeclarationListContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#whileStmt.
-    def visitWhileStmt(self, ctx:ZigParser.WhileStmtContext):
+    # Visit a parse tree produced by ZigParser#parameterDeclaration.
+    def visitParameterDeclaration(self, ctx:ZigParser.ParameterDeclarationContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#blockExprStmt.
-    def visitBlockExprStmt(self, ctx:ZigParser.BlockExprStmtContext):
+    # Visit a parse tree produced by ZigParser#parameterDeclarationSpecifier.
+    def visitParameterDeclarationSpecifier(self, ctx:ZigParser.ParameterDeclarationSpecifierContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#blockExpr.
-    def visitBlockExpr(self, ctx:ZigParser.BlockExprContext):
+    # Visit a parse tree produced by ZigParser#parameterType.
+    def visitParameterType(self, ctx:ZigParser.ParameterTypeContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#assignExpr.
-    def visitAssignExpr(self, ctx:ZigParser.AssignExprContext):
+    # Visit a parse tree produced by ZigParser#initList.
+    def visitInitList(self, ctx:ZigParser.InitListContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#expr.
-    def visitExpr(self, ctx:ZigParser.ExprContext):
+    # Visit a parse tree produced by ZigParser#statement.
+    def visitStatement(self, ctx:ZigParser.StatementContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#boolOrExpr.
-    def visitBoolOrExpr(self, ctx:ZigParser.BoolOrExprContext):
+    # Visit a parse tree produced by ZigParser#primaryBlockStatement.
+    def visitPrimaryBlockStatement(self, ctx:ZigParser.PrimaryBlockStatementContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#boolAndExpr.
-    def visitBoolAndExpr(self, ctx:ZigParser.BoolAndExprContext):
+    # Visit a parse tree produced by ZigParser#primaryBlockExpression.
+    def visitPrimaryBlockExpression(self, ctx:ZigParser.PrimaryBlockExpressionContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#compareExpr.
-    def visitCompareExpr(self, ctx:ZigParser.CompareExprContext):
+    # Visit a parse tree produced by ZigParser#primaryTypeStatement.
+    def visitPrimaryTypeStatement(self, ctx:ZigParser.PrimaryTypeStatementContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#bitwiseExpr.
-    def visitBitwiseExpr(self, ctx:ZigParser.BitwiseExprContext):
+    # Visit a parse tree produced by ZigParser#primaryTypeDeclaration.
+    def visitPrimaryTypeDeclaration(self, ctx:ZigParser.PrimaryTypeDeclarationContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#bitShiftExpr.
-    def visitBitShiftExpr(self, ctx:ZigParser.BitShiftExprContext):
+    # Visit a parse tree produced by ZigParser#errorSetDeclaration.
+    def visitErrorSetDeclaration(self, ctx:ZigParser.ErrorSetDeclarationContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#additionExpr.
-    def visitAdditionExpr(self, ctx:ZigParser.AdditionExprContext):
+    # Visit a parse tree produced by ZigParser#identList.
+    def visitIdentList(self, ctx:ZigParser.IdentListContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#multiplyExpr.
-    def visitMultiplyExpr(self, ctx:ZigParser.MultiplyExprContext):
+    # Visit a parse tree produced by ZigParser#compoundStatement.
+    def visitCompoundStatement(self, ctx:ZigParser.CompoundStatementContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#prefixExpr.
-    def visitPrefixExpr(self, ctx:ZigParser.PrefixExprContext):
+    # Visit a parse tree produced by ZigParser#compoundExpression.
+    def visitCompoundExpression(self, ctx:ZigParser.CompoundExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#compoundTypeExpression.
+    def visitCompoundTypeExpression(self, ctx:ZigParser.CompoundTypeExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#builtinCallExpression.
+    def visitBuiltinCallExpression(self, ctx:ZigParser.BuiltinCallExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#expressionStatement.
+    def visitExpressionStatement(self, ctx:ZigParser.ExpressionStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#selectionStatement.
+    def visitSelectionStatement(self, ctx:ZigParser.SelectionStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#selectionExpression.
+    def visitSelectionExpression(self, ctx:ZigParser.SelectionExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#selectionTypeExpression.
+    def visitSelectionTypeExpression(self, ctx:ZigParser.SelectionTypeExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#ifStatement.
+    def visitIfStatement(self, ctx:ZigParser.IfStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#ifExpression.
+    def visitIfExpression(self, ctx:ZigParser.IfExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#ifTypeExpression.
+    def visitIfTypeExpression(self, ctx:ZigParser.IfTypeExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#ifPrefix.
+    def visitIfPrefix(self, ctx:ZigParser.IfPrefixContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#condExpression.
+    def visitCondExpression(self, ctx:ZigParser.CondExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#thenExpression.
+    def visitThenExpression(self, ctx:ZigParser.ThenExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#elseExpression.
+    def visitElseExpression(self, ctx:ZigParser.ElseExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#elseStatement.
+    def visitElseStatement(self, ctx:ZigParser.ElseStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#switchExpression.
+    def visitSwitchExpression(self, ctx:ZigParser.SwitchExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#iterationStatement.
+    def visitIterationStatement(self, ctx:ZigParser.IterationStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#iterationExpression.
+    def visitIterationExpression(self, ctx:ZigParser.IterationExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#iterationTypeExpression.
+    def visitIterationTypeExpression(self, ctx:ZigParser.IterationTypeExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#labeledStatement.
+    def visitLabeledStatement(self, ctx:ZigParser.LabeledStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#labeledExpression.
+    def visitLabeledExpression(self, ctx:ZigParser.LabeledExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#labeledTypeExpression.
+    def visitLabeledTypeExpression(self, ctx:ZigParser.LabeledTypeExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#loopStatement.
+    def visitLoopStatement(self, ctx:ZigParser.LoopStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#loopExpression.
+    def visitLoopExpression(self, ctx:ZigParser.LoopExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#loopTypeExpression.
+    def visitLoopTypeExpression(self, ctx:ZigParser.LoopTypeExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#forStatement.
+    def visitForStatement(self, ctx:ZigParser.ForStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#forExpression.
+    def visitForExpression(self, ctx:ZigParser.ForExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#forTypeExpression.
+    def visitForTypeExpression(self, ctx:ZigParser.ForTypeExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#forPrefix.
+    def visitForPrefix(self, ctx:ZigParser.ForPrefixContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#whileStatement.
+    def visitWhileStatement(self, ctx:ZigParser.WhileStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#whileExpression.
+    def visitWhileExpression(self, ctx:ZigParser.WhileExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#whileTypeExpression.
+    def visitWhileTypeExpression(self, ctx:ZigParser.WhileTypeExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#whilePrefix.
+    def visitWhilePrefix(self, ctx:ZigParser.WhilePrefixContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#blockExpressionStatement.
+    def visitBlockExpressionStatement(self, ctx:ZigParser.BlockExpressionStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#blockExpression.
+    def visitBlockExpression(self, ctx:ZigParser.BlockExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#assignExpression.
+    def visitAssignExpression(self, ctx:ZigParser.AssignExpressionContext):
         return self.visitChildren(ctx)
 
 
@@ -184,93 +489,18 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#primaryExpr.
-    def visitPrimaryExpr(self, ctx:ZigParser.PrimaryExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#thenExpr.
-    def visitThenExpr(self, ctx:ZigParser.ThenExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#elseExpr.
-    def visitElseExpr(self, ctx:ZigParser.ElseExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#ifExpr.
-    def visitIfExpr(self, ctx:ZigParser.IfExprContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by ZigParser#block.
     def visitBlock(self, ctx:ZigParser.BlockContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#loopExpr.
-    def visitLoopExpr(self, ctx:ZigParser.LoopExprContext):
+    # Visit a parse tree produced by ZigParser#typeExpression.
+    def visitTypeExpression(self, ctx:ZigParser.TypeExpressionContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#forExpr.
-    def visitForExpr(self, ctx:ZigParser.ForExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#whileExpr.
-    def visitWhileExpr(self, ctx:ZigParser.WhileExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#curlySuffixExpr.
-    def visitCurlySuffixExpr(self, ctx:ZigParser.CurlySuffixExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#initList.
-    def visitInitList(self, ctx:ZigParser.InitListContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#typeExpr.
-    def visitTypeExpr(self, ctx:ZigParser.TypeExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#errorUnionExpr.
-    def visitErrorUnionExpr(self, ctx:ZigParser.ErrorUnionExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#suffixExpr.
-    def visitSuffixExpr(self, ctx:ZigParser.SuffixExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#designatorExpr.
-    def visitDesignatorExpr(self, ctx:ZigParser.DesignatorExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#typeName.
-    def visitTypeName(self, ctx:ZigParser.TypeNameContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#compTimeTypeExpr.
-    def visitCompTimeTypeExpr(self, ctx:ZigParser.CompTimeTypeExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#primaryTypeExpr.
-    def visitPrimaryTypeExpr(self, ctx:ZigParser.PrimaryTypeExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#primaryBiCall.
-    def visitPrimaryBiCall(self, ctx:ZigParser.PrimaryBiCallContext):
+    # Visit a parse tree produced by ZigParser#errorUnionExpression.
+    def visitErrorUnionExpression(self, ctx:ZigParser.ErrorUnionExpressionContext):
         return self.visitChildren(ctx)
 
 
@@ -299,43 +529,8 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#errorSetDecl.
-    def visitErrorSetDecl(self, ctx:ZigParser.ErrorSetDeclContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#groupedExpr.
-    def visitGroupedExpr(self, ctx:ZigParser.GroupedExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#ifTypeExpr.
-    def visitIfTypeExpr(self, ctx:ZigParser.IfTypeExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#labeledTypeExpr.
-    def visitLabeledTypeExpr(self, ctx:ZigParser.LabeledTypeExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#loopTypeExpr.
-    def visitLoopTypeExpr(self, ctx:ZigParser.LoopTypeExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#forTypeExpr.
-    def visitForTypeExpr(self, ctx:ZigParser.ForTypeExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#whileTypeExpr.
-    def visitWhileTypeExpr(self, ctx:ZigParser.WhileTypeExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#switchExpr.
-    def visitSwitchExpr(self, ctx:ZigParser.SwitchExprContext):
+    # Visit a parse tree produced by ZigParser#groupedExpression.
+    def visitGroupedExpression(self, ctx:ZigParser.GroupedExpressionContext):
         return self.visitChildren(ctx)
 
 
@@ -344,8 +539,8 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#whileContinueExpr.
-    def visitWhileContinueExpr(self, ctx:ZigParser.WhileContinueExprContext):
+    # Visit a parse tree produced by ZigParser#whileContinueExpression.
+    def visitWhileContinueExpression(self, ctx:ZigParser.WhileContinueExpressionContext):
         return self.visitChildren(ctx)
 
 
@@ -361,36 +556,6 @@ class ZigParserVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by ZigParser#callConv.
     def visitCallConv(self, ctx:ZigParser.CallConvContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#paramDecl.
-    def visitParamDecl(self, ctx:ZigParser.ParamDeclContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#paramType.
-    def visitParamType(self, ctx:ZigParser.ParamTypeContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#condExpr.
-    def visitCondExpr(self, ctx:ZigParser.CondExprContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#ifPrefix.
-    def visitIfPrefix(self, ctx:ZigParser.IfPrefixContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#whilePrefix.
-    def visitWhilePrefix(self, ctx:ZigParser.WhilePrefixContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#forPrefix.
-    def visitForPrefix(self, ctx:ZigParser.ForPrefixContext):
         return self.visitChildren(ctx)
 
 
@@ -439,23 +604,23 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#assignOpExpr.
-    def visitAssignOpExpr(self, ctx:ZigParser.AssignOpExprContext):
+    # Visit a parse tree produced by ZigParser#assignOpExpression.
+    def visitAssignOpExpression(self, ctx:ZigParser.AssignOpExpressionContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#compareOpExpr.
-    def visitCompareOpExpr(self, ctx:ZigParser.CompareOpExprContext):
+    # Visit a parse tree produced by ZigParser#compareOpExpression.
+    def visitCompareOpExpression(self, ctx:ZigParser.CompareOpExpressionContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#bitwiseOpExpr.
-    def visitBitwiseOpExpr(self, ctx:ZigParser.BitwiseOpExprContext):
+    # Visit a parse tree produced by ZigParser#bitwiseOpExpression.
+    def visitBitwiseOpExpression(self, ctx:ZigParser.BitwiseOpExpressionContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#bitwiseKwExpr.
-    def visitBitwiseKwExpr(self, ctx:ZigParser.BitwiseKwExprContext):
+    # Visit a parse tree produced by ZigParser#bitwiseKwExpression.
+    def visitBitwiseKwExpression(self, ctx:ZigParser.BitwiseKwExpressionContext):
         return self.visitChildren(ctx)
 
 
@@ -464,8 +629,23 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ZigParser#arrayTypeStart.
+    def visitArrayTypeStart(self, ctx:ZigParser.ArrayTypeStartContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#sliceTypeStart.
+    def visitSliceTypeStart(self, ctx:ZigParser.SliceTypeStartContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by ZigParser#sliceTypeRest.
     def visitSliceTypeRest(self, ctx:ZigParser.SliceTypeRestContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#ptrTypeStart.
+    def visitPtrTypeStart(self, ctx:ZigParser.PtrTypeStartContext):
         return self.visitChildren(ctx)
 
 
@@ -479,43 +659,13 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#fnCallArguments.
-    def visitFnCallArguments(self, ctx:ZigParser.FnCallArgumentsContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#sliceTypeStart.
-    def visitSliceTypeStart(self, ctx:ZigParser.SliceTypeStartContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#ptrTypeStart.
-    def visitPtrTypeStart(self, ctx:ZigParser.PtrTypeStartContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#arrayTypeStart.
-    def visitArrayTypeStart(self, ctx:ZigParser.ArrayTypeStartContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#declAuto.
-    def visitDeclAuto(self, ctx:ZigParser.DeclAutoContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#declType.
-    def visitDeclType(self, ctx:ZigParser.DeclTypeContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by ZigParser#byteAlign.
     def visitByteAlign(self, ctx:ZigParser.ByteAlignContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#identList.
-    def visitIdentList(self, ctx:ZigParser.IdentListContext):
+    # Visit a parse tree produced by ZigParser#byteAlign3.
+    def visitByteAlign3(self, ctx:ZigParser.ByteAlign3Context):
         return self.visitChildren(ctx)
 
 
@@ -529,18 +679,33 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#paramDeclList.
-    def visitParamDeclList(self, ctx:ZigParser.ParamDeclListContext):
+    # Visit a parse tree produced by ZigParser#containerUnit.
+    def visitContainerUnit(self, ctx:ZigParser.ContainerUnitContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#exprList.
-    def visitExprList(self, ctx:ZigParser.ExprListContext):
+    # Visit a parse tree produced by ZigParser#containerMembers.
+    def visitContainerMembers(self, ctx:ZigParser.ContainerMembersContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#fieldList.
-    def visitFieldList(self, ctx:ZigParser.FieldListContext):
+    # Visit a parse tree produced by ZigParser#containerDeclarationList.
+    def visitContainerDeclarationList(self, ctx:ZigParser.ContainerDeclarationListContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#topFnDefinition.
+    def visitTopFnDefinition(self, ctx:ZigParser.TopFnDefinitionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#testDeclaration.
+    def visitTestDeclaration(self, ctx:ZigParser.TestDeclarationContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#compTimeDeclaration.
+    def visitCompTimeDeclaration(self, ctx:ZigParser.CompTimeDeclarationContext):
         return self.visitChildren(ctx)
 
 

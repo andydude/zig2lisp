@@ -6,8 +6,8 @@ Align	: 'align' ;
 AllowZero : 'allowzero' ;
 And	: 'and' ;
 AnyFrame : 'anyframe' ;
-AnyError: 'anyerror' ;
 AnyType : 'anytype' ;
+Asm	: 'asm' ;
 Async	: 'async' ;
 Await   : 'await' ;
 Break	: 'break' ;
@@ -141,7 +141,7 @@ fragment StringIdent
 Integer	: Digit+ ;
 Float	: Integer Dot Integer ;
 
-Char	: SQuote CharChar* SQuote Hws?
+Char	: Apos CharChar* Apos Hws?
 	;
 
 SingleString
@@ -209,7 +209,7 @@ fragment Slash2Bang
 	: '//!' ;
 fragment DQuote
 	: '"' ;
-fragment SQuote 
+fragment Apos 
 	: '\u0027' ;
 
 fragment CharEsc
@@ -218,43 +218,26 @@ fragment CharEsc
 	| Esc [nr\\t'"]
 	;
 
-// The purpose of this token is
-// any ASCII character except
-// - U+000A ("\n") LINE FEED
-// - U+0027 ("\'") APOSTROPHE
-// - U+005c ("\\") REVERSE SOLIDUS
-fragment AsciiCharNNSS
-	: [\u0001-\u0009\u000b-\u0026\u0028-\u002c\u002e-\u005b\u005d-\u007f-]
-	| Minus
-	;
-fragment AsciiCharNNDD
-	: [\u0001-\u0009\u000b-\u0021\u0023-\u002c\u002e-\u005b\u005d-\u007f-]
-	| Minus
-	;
-
 fragment UniCharNNSS
-	: [^\n\\'] ;
+	: ~[\n\\'] ;
 
 fragment UniCharNNDD
-	: [^\n\\"] ;
+	: ~[\n\\"] ;
 	
 fragment CharChar
-	: AsciiCharNNSS
+	: UniCharNNSS
 	| CharEsc
 	;
 
 fragment StringChar
-	: AsciiCharNNDD
-	| SQuote
+	: UniCharNNDD
+	| Apos
 	| Esc Esc
 	| CharEsc
 	;
 
 fragment CommentChar
-	: [\u0001-\u0009\u000b-\uffff]
-	;
-//	| [^\n] ANTLR4 hates negative char range expressions
-
+	: ~[\n] ;
 
 ContainerDocComment 
 	: Slash2Bang Hws CommentChar* Vws 
