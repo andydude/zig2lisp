@@ -24,7 +24,7 @@ class Visitor(ZigParserVisitor):
     def __init__(self, debug=False):
         super().__init__()
         self.debug = debug
-        
+
     def defaultResult(self, node=None):
         """Unused"""
         return None
@@ -35,8 +35,14 @@ class Visitor(ZigParserVisitor):
 
     #
     # END HACKS
-    #    
+    #
 
+    # System.CodeDom.CodeBinaryOperatorType.Add
+    # System.CodeDom.CodeBinaryOperatorType.Subtract
+    # System.Linq.Expression.ExpressionType.Add
+    # System.Linq.Expression.ExpressionType.AddChecked
+    # System.Linq.Expression.ExpressionType.Subtract
+    # System.Linq.Expression.ExpressionType.SubtractChecked
     def visitAdditionExpression(self, ctx: ZigParser.AdditionExpressionContext):
         tokens = ctx.AdditionOp()
         childResults = [
@@ -54,6 +60,8 @@ class Visitor(ZigParserVisitor):
     def visitArrayTypeStart(self, ctx: ZigParser.ArrayTypeStartContext):
         return self.visitChildren(ctx)
 
+    # System.CodeDom.CodeBinaryOperatorType.Assign
+    # System.CodeDom.CodeAssignStatement{left: CodeExpr, right: CodeExpr}
     def visitAssignExpression(self, ctx: ZigParser.AssignExpressionContext):
         # print("visitAssignExpression")
         if not ctx.assignOpExpression():
@@ -67,7 +75,6 @@ class Visitor(ZigParserVisitor):
             op] + results)
 
     def visitAssignOpExpression(self, ctx: ZigParser.AssignOpExpressionContext):
-        # print("visitAssignOpExpression", ctx.getText())
         return self.visitChildren(ctx)
 
     def visitBitShiftExpression(self, ctx: ZigParser.BitShiftExpressionContext):
@@ -81,6 +88,11 @@ class Visitor(ZigParserVisitor):
         return Expression(
             [Symbol(token.text)] + childResults)
 
+    # System.CodeDom.CodeBinaryOperatorType.BitwiseOr
+    # System.CodeDom.CodeBinaryOperatorType.BitwiseAnd
+    # System.Linq.Expression.ExpressionType.And		// BitwiseAnd
+    # System.Linq.Expression.ExpressionType.Or		// BitwiseOr
+    # System.Linq.Expression.ExpressionType.ExclusiveOr	// BitwiseXor
     def visitBitwiseExpression(self, ctx: ZigParser.BitwiseExpressionContext):
         return self.visitChildren(ctx)
 
@@ -103,15 +115,15 @@ class Visitor(ZigParserVisitor):
 
 
 
-    
+
     def visitFnProtoDeclaration(self, ctx: ZigParser.FnProtoDeclarationContext):
-        name = Symbol(ctx.Ident()[0].symbol.text)
-        if len(ctx.Ident()) == 2:
-            errorParts = [
-                keywords.SYM_ANYERROR,
-                keywords.SYM_BANG]
-        elif  len(ctx.Ident()) == 1:
-            errorParts = []
+        name = Symbol(ctx.Ident().symbol.text)
+        # if len(ctx.Ident()) == 2:
+        #     errorParts = [
+        #         keywords.SYM_ANYERROR,
+        #         keywords.SYM_BANG]
+        # elif  len(ctx.Ident()) == 1:
+        errorParts = []
         params = self.visitParameterDeclarationList(ctx.parameterDeclarationList())
         begin = self.visitTypeExpression(ctx.typeExpression())
         return Expression([
@@ -125,7 +137,7 @@ class Visitor(ZigParserVisitor):
             return self.visitPrimaryBlockStatement(ctx.primaryBlockStatement())
         else:
             return self.visitChildren(ctx)
-        
+
     def visitExpressionStatement(self, ctx: ZigParser.ExpressionStatementContext):
         if ctx.varDeclaration():
             # TODO add comptime
@@ -134,7 +146,7 @@ class Visitor(ZigParserVisitor):
             return self.visitAssignExpression(ctx.assignExpression())
         else:
             return self.visitChildren(ctx)
-        
+
     def visitSelectionStatement(self, ctx: ZigParser.SelectionStatementContext):
         if ctx.ifStatement():
             return self.visitIfStatement(ctx.ifStatement())
@@ -143,9 +155,13 @@ class Visitor(ZigParserVisitor):
         else:
             return self.visitChildren(ctx)
 
+    # CodeConditionStatement {
+    #	Condition: CodeExpr,
+    #	TrueStatements: []CodeStmt,
+    #	TalseStatements: []CodeStmt,
+    # }
     def visitIfStatement(self, ctx: ZigParser.IfStatementContext):
         def payload2lambda(pay, expr):
-            # print("P2L", repr(pay), repr(expr))
             results = []
             if pay:
                 results.append(
@@ -181,28 +197,98 @@ class Visitor(ZigParserVisitor):
             + payload2lambda(thenPayload, thenExpression)
             + payload2lambda(elsePayload, elseExpression))
 
+    # CodeConditionStatement {
+    #	Condition: CodeExpr,
+    #	TrueStatements: []CodeStatement,  // Expr
+    #	FalseStatements: []CodeStatement, // Expr
+    # }
+    def visitIfExpression(self, ctx: ZigParser.IfExpressionContext):
+        def payload2lambda(pay, expr):
+            results = []
+            if pay:
+                results.append(
+                    Expression([
+                        keywords.SYM_PAYLOAD,
+                        [elsePayload],
+                        elseExpression]))
+            elif expr:
+                results.append(expr)
+            return results
+
+        condExpression, thenPayload = self.visitIfPrefix(ctx.ifPrefix())
+        thenExpression = self.visitThenExpression(ctx.thenExpression())
+
+        if ctx.Else():
+            if ctx.payload():
+                elsePayload = self.visitPayload(ctx.payload())
+            else:
+                elsePayload = None
+            elseExpression = self.visitElseExpression(ctx.elseExpression())
+        else:
+            elsePayload = None
+            elseExpression = None
+
+        return Expression(
+            [keywords.SYM_IF_EXPR, condExpression]
+            + payload2lambda(thenPayload, thenExpression)
+            + payload2lambda(elsePayload, elseExpression))
+
+    # CodeConditionStatement {
+    #	Condition: CodeExpr,
+    #	TrueStatements: []CodeStatement,  // TypeExpr
+    #	FalseStatements: []CodeStatement, // TypeExpr
+    # }
+    def visitIfTypeExpression(self, ctx: ZigParser.IfTypeExpressionContext):
+        return self.visitChildren(ctx)
+
+    # CodeLabeledStatement {
+    #	Label: string,
+    #	Statement: CodeStatement,
+    # }
     def visitLabeledStatement(self, ctx: ZigParser.LabeledStatementContext):
         return self.visitChildren(ctx)
 
     def visitLoopStatement(self, ctx: ZigParser.LoopStatementContext):
         return self.visitChildren(ctx)
 
+    # CodeIterationStatement(
+    #	InitStatement: CodeStatement,
+    #	TestExpression: CodeExpression,
+    #	IncrementStatement: CodeStatement,
+    #	Statements: []CodeStatement)
     def visitForStatement(self, ctx: ZigParser.ForStatementContext):
+        return self.visitChildren(ctx)
+    def visitForExpression(self, ctx: ZigParser.ForExpressionContext):
+        return self.visitChildren(ctx)
+    def visitForTypeExpression(self, ctx: ZigParser.ForTypeExpressionContext):
         return self.visitChildren(ctx)
 
     def visitWhileStatement(self, ctx: ZigParser.WhileStatementContext):
         return self.visitChildren(ctx)
 
+    # CodeBinaryOperatorExpression {
+    #	left: CodeExpression,
+    #	op: CodeBinaryOperatorType,
+    #	right: CodeExpression,
+    # }
     def visitExpression(self, ctx: ZigParser.ExpressionContext):
         # print("EXPR", repr(ctx))
         return self.visitChildren(ctx)
 
+    # System.CodeDom.CodeBinaryOperatorType.BooleanOr	// LogicalOr
+    # System.Linq.Expression.ExpressionType.OrElse	// LogicalOr
     def visitBoolOrExpression(self, ctx: ZigParser.BoolOrExpressionContext):
         return self.visitChildren(ctx)
 
+    # System.CodeDom.CodeBinaryOperatorType.BooleanAnd	// LogicalAnd
+    # System.Linq.Expression.ExpressionType.AndAlso	// LogicalAnd
     def visitBoolAndExpression(self, ctx: ZigParser.BoolAndExpressionContext):
         return self.visitChildren(ctx)
 
+    # CodeBinaryOperatorType.LessThan
+    # CodeBinaryOperatorType.LessThanOrEqual
+    # CodeBinaryOperatorType.GreaterThan
+    # CodeBinaryOperatorType.GreaterThanOrEqual
     def visitCompareExpression(self, ctx: ZigParser.CompareExpressionContext):
         tokens = ctx.compareOpExpression()
         childResults = [
@@ -215,6 +301,9 @@ class Visitor(ZigParserVisitor):
             [Symbol(token.text)] + childResults)
         return self.visitChildren(ctx)
 
+    # CodeBinaryOperatorType.Multiply
+    # CodeBinaryOperatorType.Divide
+    # CodeBinaryOperatorType.Modulus
     def visitMultiplyExpression(self, ctx: ZigParser.MultiplyExpressionContext):
         tokens = ctx.MultiplyOp()
         childResults = [
@@ -227,9 +316,11 @@ class Visitor(ZigParserVisitor):
             [Symbol(token.text)] + childResults)
 
     def visitPrefixExpression(self, ctx: ZigParser.PrefixExpressionContext):
-        return self.visitChildren(ctx)
+        result = self.visitPrimaryExpression(ctx.primaryExpression())
+        return result
 
     def visitPrimaryExpression(self, ctx: ZigParser.PrimaryExpressionContext):
+        print(repr(ctx))
         if ctx.asmExpression():
             return self.visitAsmExpression(ctx.asmExpression())
         elif ctx.primaryBlockExpression():
@@ -239,7 +330,7 @@ class Visitor(ZigParserVisitor):
             return self.visitCompoundLiteral(ctx.compoundLiteral())
         if ctx.loopExpression():
             pass
-        
+
     def visitPrimaryBlockStatement(self, ctx: ZigParser.PrimaryBlockStatementContext):
         if ctx.compoundStatement():
             return self.visitCompoundStatement(
@@ -252,7 +343,7 @@ class Visitor(ZigParserVisitor):
                 ctx.iterationStatement())
         else:
             raise ValueError
-        
+
     def visitPrimaryBlockExpression(self, ctx: ZigParser.PrimaryBlockExpressionContext):
         if ctx.compoundExpression():
             return self.visitCompoundExpression(
@@ -283,7 +374,7 @@ class Visitor(ZigParserVisitor):
             return self.visitPrimaryTypeDeclaration(ctx.primaryTypeDeclaration())
         else:
             raise ValueError
-        
+
     def visitPrimaryTypeStatement(self, ctx: ZigParser.PrimaryTypeStatementContext):
         if ctx.compoundTypeExpression():
             return self.visitCompoundTypeExpression(
@@ -309,7 +400,7 @@ class Visitor(ZigParserVisitor):
                 ctx.fnProtoDeclaration())
         else:
             raise ValueError
-        
+
     def visitStructOrUnionSpecifier(self, ctx: ZigParser.StructOrUnionSpecifierContext):
             return self.visitChildren(ctx)
     def visitTestDeclaration(self, ctx: ZigParser.TestDeclarationContext):
@@ -349,19 +440,24 @@ class Visitor(ZigParserVisitor):
     def visitEnumSpecifier(self, ctx: ZigParser.EnumSpecifierContext):
             return self.visitChildren(ctx)
     def visitContainerUnit(self, ctx: ZigParser.ContainerUnitContext):
-            return self.visitChildren(ctx)
+        return self.visitContainerMembers(ctx.containerMembers())
     def visitCompoundStatement(self, ctx: ZigParser.CompoundStatementContext):
             return self.visitChildren(ctx)
     def visitCompTimeDeclaration(self, ctx: ZigParser.CompTimeDeclarationContext):
             return self.visitChildren(ctx)
     def visitCondExpression(self, ctx: ZigParser.CondExpressionContext):
             return self.visitChildren(ctx)
+
+    # RustAST: Lit
+    # CodePrimitiveExpression(object value)
     def visitConstantExpression(self, ctx: ZigParser.ConstantExpressionContext):
             return self.visitChildren(ctx)
+
     def visitBreakLabel(self, ctx: ZigParser.BreakLabelContext):
             return self.visitChildren(ctx)
     def visitBlockLabel(self, ctx: ZigParser.BlockLabelContext):
             return self.visitChildren(ctx)
+
     def visitAsmClobbers(self, ctx: ZigParser.AsmClobbersContext):
             return self.visitChildren(ctx)
     def visitAsmExpression(self, ctx: ZigParser.AsmExpressionContext):
@@ -369,7 +465,9 @@ class Visitor(ZigParserVisitor):
     def visitAsmInputItem(self, ctx: ZigParser.AsmInputItemContext):
             return self.visitChildren(ctx)
     def visitAsmInputList(self, ctx: ZigParser.AsmInputListContext):
-            return self.visitChildren(ctx)
+        return list(map(
+            self.visitAsmInputItem,
+            ctx.asmInputItem()))
     def visitAsmInput(self, ctx: ZigParser.AsmInputContext):
             return self.visitChildren(ctx)
     def visitAsmOutputItem(self, ctx: ZigParser.AsmOutputItemContext):
@@ -378,9 +476,11 @@ class Visitor(ZigParserVisitor):
         typeEx = ctx.typeExpression()
         name3 = ctx.Ident()[1].symbol.text
         return [name, name2, name3, typeEx]
-    
+
     def visitAsmOutputList(self, ctx: ZigParser.AsmOutputListContext):
-            return self.visitChildren(ctx)
+        return list(map(
+            self.visitAsmOutputItem,
+            ctx.asmOutputItem()))
     def visitAsmOutput(self, ctx: ZigParser.AsmOutputContext):
         outList = self.visitAsmOutputList(
             ctx.asmOutputList())
@@ -390,19 +490,30 @@ class Visitor(ZigParserVisitor):
 
     def visitCompoundExpression(self, ctx: ZigParser.CompoundExpressionContext):
         if ctx.Break():
+            # System.CodeDom.CodeGotoStatement(string label)
+            # System.Linq.Expression.ExpressionType.Goto
             return Expression(
                 [keywords.SYM_BREAK] +
-                ([self.visitExpression(ctx.expression())]
+                (self.visitBreakLabel(ctx.breakLabel())
+                 if ctx.breakLabel() else []) +
+                (self.visitExpression(ctx.expression())
                  if ctx.expression() else []))
         elif ctx.CompTime():
             pass
         elif ctx.NoSuspend():
+            # CodeGotoStatement(string label)
             pass
         elif ctx.Continue():
-            pass
+            # CodeGotoStatement(string label)
+            return Expression(
+                [keywords.SYM_CONTINUE] +
+                (self.visitBreakLabel(ctx.breakLabel())
+                 if ctx.breakLabel() else []))
         elif ctx.Resume():
+            # CodeGotoStatement(string label)
             pass
         elif ctx.Return():
+            # CodeMethodReturnStatement(CodeExpression expression)
             return Expression(
                 [keywords.SYM_RETURN] +
                 ([self.visitExpression(ctx.expression())]
@@ -410,38 +521,7 @@ class Visitor(ZigParserVisitor):
         elif ctx.block():
             return self.visitBlock(ctx.block())
         else:
-            return self.visitChildren(ctx)
-
-    def visitIfExpression(self, ctx: ZigParser.IfExpressionContext):
-        def payload2lambda(pay, expr):
-            results = []
-            if pay:
-                results.append(
-                    Expression([
-                        keywords.SYM_PAYLOAD,
-                        [elsePayload],
-                        elseExpression]))
-            elif expr:
-                results.append(expr)
-            return results
-
-        condExpression, thenPayload = self.visitIfPrefix(ctx.ifPrefix())
-        thenExpression = self.visitThenExpression(ctx.thenExpression())
-
-        if ctx.Else():
-            if ctx.payload():
-                elsePayload = self.visitPayload(ctx.payload())
-            else:
-                elsePayload = None
-            elseExpression = self.visitElseExpression(ctx.elseExpression())
-        else:
-            elsePayload = None
-            elseExpression = None
-
-        return Expression(
-            [keywords.SYM_IF_EXPR, condExpression]
-            + payload2lambda(thenPayload, thenExpression)
-            + payload2lambda(elsePayload, elseExpression))
+            raise ValueError
 
     def visitBlock(self, ctx: ZigParser.BlockContext):
         if len(ctx.statement()) == 1:
@@ -452,9 +532,6 @@ class Visitor(ZigParserVisitor):
                 for node in ctx.statement()])
 
     def visitLoopExpression(self, ctx: ZigParser.LoopExpressionContext):
-        return self.visitChildren(ctx)
-
-    def visitForExpression(self, ctx: ZigParser.ForExpressionContext):
         return self.visitChildren(ctx)
 
     def visitWhileExpression(self, ctx: ZigParser.WhileExpressionContext):
@@ -577,14 +654,55 @@ class Visitor(ZigParserVisitor):
     def visitLineStringLiteral(self, ctx: ZigParser.LineStringLiteralContext):
         token = ctx.LineString().symbol
         return atom.zig_line_string_literal(token.text)
-        
+
+    # CodeTypeReferenceCollection(value: []CodeTypeReference)
+    # CodeTypeReference(type: Type)
+    # CodeObject(userData: ListDictionary)
+
+    # CodeMemberField {
+    # 	Name: string,
+    #	Type: CodeTypeReference,
+    #	CustomAttributes: CodeAttributeDeclarationCollection,
+    #	Comments: CodeCommentStatementCollection,
+    # }
+
+    # RustAST: Arg
+    # FnArgType := struct { Name: str, Type: Type }
+
+    # RustAST: Signature
+    # FnSigType := struct { Params: []FnArgType, Returns: []FnArgType }
+
+    # CodeMemberMethod {
+    # 	Name: string,
+    #	Parameters: CodeParameterDeclarationExpressionCollection,
+    #	Statements: CodeStatementCollection,
+    #	ReturnType: CodeTypeReference,
+    #	//ReturnTypeCustomAttributes: CodeAttributeDeclarationCollection,
+    #   //ImplementationTypes: CodeTypeReferenceCollection,
+    # 	//TypeParameters: CodeTypeParameterCollection,
+    #	CustomAttributes: CodeAttributeDeclarationCollection,
+    #	Comments: CodeCommentStatementCollection,
+    # }
+
+    # CodeMemberProperty {
+    # 	Name: string,
+    #	Parameters: CodeParameterDeclarationExpressionCollection,
+    # 	GetStatements: CodeStatementCollection,
+    # 	SetStatements: CodeStatementCollection,
+    #	CustomAttributes: CodeAttributeDeclarationCollection,
+    #	Comments: CodeCommentStatementCollection,
+    # }
+
+    #?
     def visitCompoundTypeExpression(self, ctx: ZigParser.CompoundTypeExpressionContext):
         if ctx.Dot():
             if ctx.Ident():
+                # CodeFieldReferenceExpression
                 return Expression([
                     keywords.SYM_DOT,
                     repr(ctx.Ident().symbol.text)])
             elif ctx.initList():
+                # CodeObjectCreateExpression
                 inits = self.visitInitList(ctx.initList())
                 return Expression([
                     keywords.SYM_DOT, inits])
@@ -593,36 +711,30 @@ class Visitor(ZigParserVisitor):
         elif ctx.Error():
             print("visitPrimaryTypeExpression.Error")
         elif ctx.CompTime():
-            print("visitPrimaryTypeExpression.CompTime")            
+            print("visitPrimaryTypeExpression.CompTime")
         elif ctx.builtinCallExpression():
             return self.visitBuiltinCallExpression(
                 ctx.builtinCallExpression())
-            print("visitPrimaryTypeExpression.CompTime")            
+            print("visitPrimaryTypeExpression.CompTime")
         else:
             return self.visitChildren(ctx)
 
     def visitByteAlign3(self, ctx: ZigParser.ByteAlign3Context):
         return self.visitChildren(ctx)
-    
+
     def visitContainerDeclaration(self, ctx: ZigParser.ContainerDeclarationContext):
         return self.visitChildren(ctx)
-        
+
     def visitErrorSetDeclaration(self, ctx: ZigParser.ErrorSetDeclarationContext):
         return self.visitChildren(ctx)
 
     def visitGroupedExpression(self, ctx: ZigParser.GroupedExpressionContext):
         return self.visitExpression(ctx.expression())
 
-    def visitIfTypeExpression(self, ctx: ZigParser.IfTypeExpressionContext):
-        return self.visitChildren(ctx)
-
     def visitLabeledTypeExpression(self, ctx: ZigParser.LabeledTypeExpressionContext):
         return self.visitChildren(ctx)
 
     def visitLoopTypeExpression(self, ctx: ZigParser.LoopTypeExpressionContext):
-        return self.visitChildren(ctx)
-
-    def visitForTypeExpression(self, ctx: ZigParser.ForTypeExpressionContext):
         return self.visitChildren(ctx)
 
     def visitWhileTypeExpression(self, ctx: ZigParser.WhileTypeExpressionContext):
@@ -676,6 +788,7 @@ class Visitor(ZigParserVisitor):
     def visitPtrListPayload(self, ctx: ZigParser.PtrListPayloadContext):
         return self.visitChildren(ctx)
 
+
     def visitSwitchProng(self, ctx: ZigParser.SwitchProngContext):
         return self.visitChildren(ctx)
 
@@ -695,8 +808,8 @@ class Visitor(ZigParserVisitor):
         return self.visitChildren(ctx)
 
     def visitPrefixTypeOp(self, ctx: ZigParser.PrefixTypeOpContext):
-        if ctx.Question():
-            return lambda a: Expression(["zig:ption", a])
+        if ctx.Quest():
+            return lambda a: Expression([Symbol("zig:option"), a])
         return self.visitChildren(ctx)
 
     def visitSliceTypeRest(self, ctx: ZigParser.SliceTypeRestContext):
@@ -768,7 +881,7 @@ class Visitor(ZigParserVisitor):
                 [keywords.SYM_USING_NS, expr])
         else:
             raise ValueError
-        
+
     def visitTopFnDefinition(self, ctx: ZigParser.TopFnDefinitionContext):
         if ctx.fnProtoDeclaration():
             proto = self.visitFnProtoDeclaration(ctx.fnProtoDeclaration())
@@ -777,7 +890,7 @@ class Visitor(ZigParserVisitor):
                 return Expression(list(proto) + [block])
             else:
                 return proto
-            
+
     def visitTopVarDeclaration(self, ctx: ZigParser.TopVarDeclarationContext):
         if ctx.varDeclaration():
             return self.visitVarDeclaration(ctx.varDeclaration())
@@ -829,7 +942,7 @@ class Visitor(ZigParserVisitor):
             return result
         else:
             raise ValueError
-        
+
     def visitFieldName(self, ctx: ZigParser.FieldNameContext):
         return Symbol(ctx.Ident().symbol.text)
 
@@ -840,26 +953,32 @@ class Visitor(ZigParserVisitor):
             fields = []
         if not fields:
             fields = []
-        decls = [
-            self.visitContainerDeclarationList(node)
-            for node in ctx.containerDeclarationList()
-        ]
-        # print(fields)
-        # print(decls)
+        decls = list(map(
+                     self.visitContainerDeclarationList,
+                     ctx.containerDeclarationList()))
         return Expression([keywords.SYM_MEMBERS] +
-                          [(fields)] +
-                           [(decls)])
+                          fields +
+                          decls)
 
+    # CodeArgumentReferenceExpression {
+    # 	ParameterName: string,
+    # }
 
-    # Visit a parse tree produced by ZigParser#varName.
+    # CodeVariableReferenceExpression {
+    #	VariableName: string,
+    # }
     def visitVarName(self, ctx: ZigParser.VarNameContext):
         return Symbol(ctx.Ident().symbol.text)
 
 
-    # Visit a parse tree produced by ZigParser#varDeclaration.
+    # CodeVariableDeclarationStatement {
+    # 	Name: string,
+    #	Type: CodeTypeReference,
+    # }
     def visitVarDeclaration(self, ctx: ZigParser.VarDeclarationContext):
         isConst = ctx.Const()
         isVar = ctx.Var()
+        attrs = {}
         name = self.visitVarName(ctx.varName())
         if ctx.typeExpression():
             typeof = self.visitTypeExpression(ctx.typeExpression())
@@ -875,8 +994,16 @@ class Visitor(ZigParserVisitor):
             varDeclarationType = keywords.SYM_CONST
         else:
             raise ValueError
-        return Expression([
-            varDeclarationType, {}, name, typeof, value])
+
+        if len(attrs) > 0 and typeof != None:
+            return Expression([
+                varDeclarationType, attrs, name, typeof, value])
+        elif len(attrs) == 0 and typeof != None:
+            return Expression([
+                varDeclarationType, name, typeof, value])
+        else:
+            return Expression([
+                varDeclarationType, name, value])
 
 
 def convert(filename="/dev/stdin", start="start", debug=False):

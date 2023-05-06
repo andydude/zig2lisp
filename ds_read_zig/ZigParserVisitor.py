@@ -144,36 +144,6 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#topVarDeclaration.
-    def visitTopVarDeclaration(self, ctx:ZigParser.TopVarDeclarationContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#fnProtoDeclarationEx.
-    def visitFnProtoDeclarationEx(self, ctx:ZigParser.FnProtoDeclarationExContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#varDeclarationEx.
-    def visitVarDeclarationEx(self, ctx:ZigParser.VarDeclarationExContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#varName.
-    def visitVarName(self, ctx:ZigParser.VarNameContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#varDeclaration.
-    def visitVarDeclaration(self, ctx:ZigParser.VarDeclarationContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#varDeclarationSpecifiers.
-    def visitVarDeclarationSpecifiers(self, ctx:ZigParser.VarDeclarationSpecifiersContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by ZigParser#typeName.
     def visitTypeName(self, ctx:ZigParser.TypeNameContext):
         return self.visitChildren(ctx)
@@ -251,6 +221,16 @@ class ZigParserVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by ZigParser#parameterType.
     def visitParameterType(self, ctx:ZigParser.ParameterTypeContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#typeExpression.
+    def visitTypeExpression(self, ctx:ZigParser.TypeExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#errorUnionExpression.
+    def visitErrorUnionExpression(self, ctx:ZigParser.ErrorUnionExpressionContext):
         return self.visitChildren(ctx)
 
 
@@ -494,16 +474,6 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#typeExpression.
-    def visitTypeExpression(self, ctx:ZigParser.TypeExpressionContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ZigParser#errorUnionExpression.
-    def visitErrorUnionExpression(self, ctx:ZigParser.ErrorUnionExpressionContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by ZigParser#integerLiteral.
     def visitIntegerLiteral(self, ctx:ZigParser.IntegerLiteralContext):
         return self.visitChildren(ctx)
@@ -696,6 +666,36 @@ class ZigParserVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by ZigParser#topFnDefinition.
     def visitTopFnDefinition(self, ctx:ZigParser.TopFnDefinitionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#topVarDeclaration.
+    def visitTopVarDeclaration(self, ctx:ZigParser.TopVarDeclarationContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#fnProtoDeclarationEx.
+    def visitFnProtoDeclarationEx(self, ctx:ZigParser.FnProtoDeclarationExContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#varDeclarationEx.
+    def visitVarDeclarationEx(self, ctx:ZigParser.VarDeclarationExContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#varName.
+    def visitVarName(self, ctx:ZigParser.VarNameContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#varDeclaration.
+    def visitVarDeclaration(self, ctx:ZigParser.VarDeclarationContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#varDeclarationSpecifiers.
+    def visitVarDeclarationSpecifiers(self, ctx:ZigParser.VarDeclarationSpecifiersContext):
         return self.visitChildren(ctx)
 
 

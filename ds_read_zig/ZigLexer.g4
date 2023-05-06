@@ -54,6 +54,60 @@ Volatile: 'volatile' ;
 While   : 'while' ; // { ZigKeywordSymbol.while } ;
 
 
+// Other Tokens
+LPar		: '(' ;
+RPar		: ')' ;
+LBrace		: '{' ;
+RBrace		: '}' ;
+LBrack		: '[' ;
+RBrack		: ']' ;
+Amp		: '&' ;
+At		: '@' ;
+Bang		: '!' ;
+Caret   	: '^' ;
+Colon		: ':' ;
+Comma		: ',' ;
+Dot		: '.' ;
+Dot2		: '..' ;
+DotQue  	: '.?' ;
+DotStar 	: '.*' ;
+Ellipsis	: '...' ;
+Equal		: '=' ;
+Equal2		: '==' ;
+EqualArrow 	: '=>' ;
+Esc		: '\\' ;
+Minus   	: '-' ;
+MinusArrow 	: '->' ;
+MinusPct	: '-%' ;
+MinusPipe	: '-|' ;
+Pct	    	: '%' ;
+Pipe    	: '|' ;
+Pipe2    	: '||' ;
+Plus		: '+' ;
+PlusPct		: '+%' ;
+PlusPipe	: '+|' ;
+Quest   	: '?' ;
+Semi		: ';' ;
+Sol		: '/' ;
+Star    	: '*' ;
+Star2    	: '**' ;
+StarPct    	: '*%' ;
+StarPipe    	: '*|' ;
+Tilde   	: '~' ;
+
+fragment Apos 
+	: '\u0027' ;
+fragment Quot
+	: '"' ;
+fragment Sol2
+	: '//' ;
+fragment Sol3
+	: '///' ;
+fragment Sol4
+	: '////' ;
+fragment Sol2Bang
+	: '//!' ;
+
 AssignOp
 	: '*='
 	| '*|='
@@ -95,29 +149,29 @@ BitShiftOp
 	;
 
 AdditionOp
-	: Plus
-	| Minus
-	| MinusPct
-	| '++'
-	| '+%'
-	| '+|'
-	| '-|'
+	: '++'		// Increment
+	| '--'		// Decrement
+	| Plus		// AddWithOverflow
+	| PlusPct  	// WrappingAdd
+	| PlusPipe 	// SaturatingAdd
+	| Minus  	// SubWithOverflow
+	| MinusPct 	// WrappingSub
+	| MinusPipe	// SaturatingSub
 	;
 
 MultiplyOp
-	: '||'
-	| Star
-	| Slash
-	| '%'
-	| '**'
-	| '*%'
-	| '*|'
+	: Pipe2
+	| Star		
+	| Sol
+	| Pct
+	| Star2
+	| StarPct
+	| StarPipe
 	;
 
 PrefixOp
-	: Bang
+	: Tilde
 	| Minus
-	| Tilde
 	| MinusPct
 	| Amp
 	| Try
@@ -127,6 +181,16 @@ PrefixOp
 // Identifiers
 BuiltinIdent : At Ident ;
 
+// ArgumentReferenceExpression
+// BaseReferenceExpression
+// EventReferenceExpression
+// FieldReferenceExpression
+// MethodReferenceExpression
+// PropertyReferenceExpression
+// PropertySetValueReferenceExpression
+// ThisReferenceExpression
+// TypeReferenceExpression
+// VariableReferenceExpression
 Ident
 	: SingleIdent
 	| StringIdent
@@ -145,7 +209,7 @@ Char	: Apos CharChar* Apos Hws?
 	;
 
 SingleString
-	: DQuote StringChar* DQuote Hws?
+	: Quot StringChar* Quot Hws?
 	;
 	
 // String
@@ -154,42 +218,8 @@ SingleString
 // 	;
 
 LineString
-	: ((BackSlash2 CommentChar* Vws)+ Hws?)+
+	: ((Esc Esc CommentChar* Vws)+ Hws?)+
 	;
-
-// Other Tokens
-LParen	: '(' ;
-RParen	: ')' ;
-LBrace	: '{' ;
-RBrace	: '}' ;
-LBrack	: '[' ;
-RBrack	: ']' ;
-Amp	: '&' ;
-At	: '@' ;
-BackSlash2: '\\\\' ;
-Bang	: '!' ;
-Caret   : '^' ;
-Colon	: ':' ;
-Comma	: ',' ;
-Dot	: '.' ;
-Dot2	: '..' ;
-Ellipsis: '...' ;
-Equal	: '=' ;
-Equal2	: '==' ;
-EqualArrow : '=>' ;
-Esc	: '\\' ;
-Minus   : '-' ;
-MinusArrow : '->' ;
-MinusPct: '-%' ;
-Pipe    : '|' ;
-Plus	: '+' ;
-Semi	: ';' ;
-Slash	: '/' ;
-Star    : '*' ;
-Tilde   : '~' ;
-Question: '?' ;
-DotStar : '.*' ;
-DotQue  : '.?' ;
 
 fragment Bit
 	: [01] ;
@@ -198,19 +228,6 @@ fragment Digit
 fragment HexDigit
 	: [0-9a-fA-F] ;
 
-fragment Slash2
-	: '//' ;
-fragment Slash3
-	: '///' ;
-fragment Slash4
-	: '////' ;
-
-fragment Slash2Bang
-	: '//!' ;
-fragment DQuote
-	: '"' ;
-fragment Apos 
-	: '\u0027' ;
 
 fragment CharEsc
 	: Esc 'x' HexDigit HexDigit
@@ -240,16 +257,16 @@ fragment CommentChar
 	: ~[\n] ;
 
 ContainerDocComment 
-	: Slash2Bang Hws CommentChar* Vws 
+	: Sol2Bang Hws CommentChar* Vws 
 	;
 
 DocComment 
-	: Slash3 Hws CommentChar* Minus? Vws 
+	: Sol3 Hws CommentChar* Minus? Vws 
 	;
 
 LineComment 
-	: Slash2 Hws CommentChar* Vws
-	| Slash4 Hws CommentChar* Vws
+	: Sol2 Hws CommentChar* Vws
+	| Sol4 Hws CommentChar* Vws
 	;
 
 fragment Vws	: [\n]+ ;

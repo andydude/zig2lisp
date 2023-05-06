@@ -25,7 +25,7 @@ primaryExpression
 	;
 
 asmExpression
-	: Asm Volatile? LParen expression asmOutput? RParen
+	: Asm Volatile? LPar expression asmOutput? RPar
 	;
 
 asmOutput
@@ -34,7 +34,7 @@ asmOutput
 
 asmOutputItem
 	: LBrack Ident RBrack SingleString
-	  LParen (MinusArrow typeExpression / Ident) RParen
+	  LPar (MinusArrow typeExpression / Ident) RPar
 	;
 
 asmInput
@@ -43,7 +43,7 @@ asmInput
 
 asmInputItem
 	: LBrack Ident RBrack SingleString
-	  LParen expression RParen
+	  LPar expression RPar
 	;
 
 asmClobbers
@@ -72,7 +72,7 @@ designatorExpression
 
 // Non-standard
 fnCallArguments
-	: LParen argumentExpressionList RParen
+	: LPar argumentExpressionList RPar
 	;
 
 // SS 6.5.2.0.2 argument-expression-list
@@ -121,7 +121,7 @@ multiplyExpression
 	;
 
 prefixExpression
-	: PrefixOp* primaryExpression
+	: (PrefixOp* | Bang) primaryExpression
 	;
 
 // SS 6.6.0.0.1 constant-expression
@@ -132,6 +132,72 @@ constantExpression
 	| singleStringLiteral
 	| lineStringLiteral
 	;
+
+//    # System.Linq.Expression.ExpressionType.ArrayLength
+//    # System.Linq.Expression.ExpressionType.ArrayIndex
+//    # System.Linq.Expression.ExpressionType.Call
+//    # System.Linq.Expression.ExpressionType.Coalesce
+//    # System.Linq.Expression.ExpressionType.Conditional
+//    # System.Linq.Expression.ExpressionType.Constant
+//    # System.Linq.Expression.ExpressionType.Convert
+//    # System.Linq.Expression.ExpressionType.ConvertChecked
+//    # System.Linq.Expression.ExpressionType.Divide
+//    # System.Linq.Expression.ExpressionType.Equal
+//    # System.Linq.Expression.ExpressionType.GreaterThan
+//    # System.Linq.Expression.ExpressionType.GreaterThanOrEqual
+//    # System.Linq.Expression.ExpressionType.Invoke
+//    # System.Linq.Expression.ExpressionType.Lambda
+//    # System.Linq.Expression.ExpressionType.LeftShift
+//    # System.Linq.Expression.ExpressionType.LessThan
+//    # System.Linq.Expression.ExpressionType.LessThanOrEqual
+//    # System.Linq.Expression.ExpressionType.ListInit
+//    # System.Linq.Expression.ExpressionType.MemberAccess
+//    # System.Linq.Expression.ExpressionType.MemberInit
+//    # System.Linq.Expression.ExpressionType.Modulo
+//    # System.Linq.Expression.ExpressionType.Multiply
+//    # System.Linq.Expression.ExpressionType.MultiplyChecked
+//    # System.Linq.Expression.ExpressionType.Negate
+//    # System.Linq.Expression.ExpressionType.UnaryPlus
+//    # System.Linq.Expression.ExpressionType.NegateChecked
+//    # System.Linq.Expression.ExpressionType.New
+//    # System.Linq.Expression.ExpressionType.NewArrayInit
+//    # System.Linq.Expression.ExpressionType.NewArrayBounds
+//    # System.Linq.Expression.ExpressionType.Not
+//    # System.Linq.Expression.ExpressionType.NotEqual
+//    # System.Linq.Expression.ExpressionType.Parameter
+//    # System.Linq.Expression.ExpressionType.Power
+//    # System.Linq.Expression.ExpressionType.Quote
+//    # System.Linq.Expression.ExpressionType.RightShift
+//    # System.Linq.Expression.ExpressionType.TypeAs
+//    # System.Linq.Expression.ExpressionType.TypeIs
+//    # System.Linq.Expression.ExpressionType.Assign
+//    # System.Linq.Expression.ExpressionType.Block
+//    # System.Linq.Expression.ExpressionType.DebugInfo
+//    # System.Linq.Expression.ExpressionType.Decrement
+//    # System.Linq.Expression.ExpressionType.Dynamic
+//    # System.Linq.Expression.ExpressionType.Default
+//    # System.Linq.Expression.ExpressionType.Extension
+//    # System.Linq.Expression.ExpressionType.Increment
+//    # System.Linq.Expression.ExpressionType.Index
+//    # System.Linq.Expression.ExpressionType.Label
+//    # System.Linq.Expression.ExpressionType.RuntimeVariables
+//    # System.Linq.Expression.ExpressionType.Loop
+//    # System.Linq.Expression.ExpressionType.Switch
+//    # System.Linq.Expression.ExpressionType.Throw
+//    # System.Linq.Expression.ExpressionType.Try
+//    # System.Linq.Expression.ExpressionType.Unbox
+//    # System.Linq.Expression.ExpressionType.AddAssign
+//    # System.Linq.Expression.ExpressionType.*Assign
+//    # System.Linq.Expression.ExpressionType.*AssignChecked
+//    # System.Linq.Expression.ExpressionType.PreIncrementAssign
+//    # System.Linq.Expression.ExpressionType.PreDecrementAssign
+//    # System.Linq.Expression.ExpressionType.PostIncrementAssign
+//    # System.Linq.Expression.ExpressionType.PostDecrementAssign
+//    # System.Linq.Expression.ExpressionType.TypeEqual
+//    # System.Linq.Expression.ExpressionType.OnesComplement
+//    # System.Linq.Expression.ExpressionType.IsTrue
+//    # System.Linq.Expression.ExpressionType.IsFalse
+
 
 // SS 6.7.0.0.1 declaration
 declaration
@@ -163,8 +229,8 @@ containerDeclarationType
 
 // SS 6.7.2.1.1 struct-or-union-specifier
 structOrUnionSpecifier
-	: Struct (LParen expression RParen)?
-	| Union (LParen (Enum (LParen expression RParen)? | expression) RParen)?
+	: Struct (LPar expression RPar)?
+	| Union (LPar (Enum (LPar expression RPar)? | expression) RPar)?
 	;
 
 // SS 6.7.2.1.7 member-declarator-list
@@ -194,14 +260,14 @@ fieldName
 
 // SS 6.7.2.2.1 enum-specifier
 enumSpecifier
-	: Enum (LParen expression RParen)?
+	: Enum (LPar expression RPar)?
 	;
 
 // SS 6.7.6.0.4 function-declarator
 fnProtoDeclaration
-	: Fn Ident? LParen parameterDeclarationList RParen
+	: Fn Ident? LPar parameterDeclarationList RPar
 	  fnProtoDeclarationSpecifiers
-	  (Ident? Bang)? typeExpression
+	  typeExpression
 	;
 
 fnProtoDeclarationSpecifiers
@@ -233,6 +299,14 @@ parameterDeclarationSpecifier
 parameterType
 	: AnyType
 	| typeExpression
+	;
+
+typeExpression
+	: prefixTypeOp* errorUnionExpression
+	;
+
+errorUnionExpression
+	: suffixExpression (Bang typeExpression)?
 	;
 
 // SS 6.7.10.0.1 braced-initializer
@@ -331,8 +405,8 @@ compoundExpression
 
 compoundTypeExpression
 	: builtinCallExpression
-	| Dot Ident
-	| Dot initList
+	| Dot Ident		// anonymousFieldReference
+	| Dot initList		// anonymousCompoundLiteral 
 	| Error Dot Ident
 	| CompTime typeExpression
 	;
@@ -379,7 +453,7 @@ ifTypeExpression
 	;
 
 ifPrefix
-	: If LParen condExpression RParen ptrPayload?
+	: If LPar condExpression RPar ptrPayload?
 	;
 
 condExpression
@@ -392,7 +466,7 @@ elseStatement
 	: statement ;
 
 switchExpression
-	: Switch LParen expression RParen LBrace switchProngList RBrace
+	: Switch LPar expression RPar LBrace switchProngList RBrace
 	;
 
 // SS 6.8.5.0.1 iteration-statement
@@ -449,7 +523,7 @@ forTypeExpression
 	;
 
 forPrefix
-	: For LParen forArgumentsList RParen ptrListPayload
+	: For LPar forArgumentsList RPar ptrListPayload
 	;
 
 whileStatement
@@ -466,7 +540,7 @@ whileTypeExpression
 	;
 
 whilePrefix
-	: While LParen condExpression RParen ptrPayload? whileContinueExpression?
+	: While LPar condExpression RPar ptrPayload? whileContinueExpression?
 	;
 
 blockExpressionStatement
@@ -494,14 +568,6 @@ block
 	: LBrace statement* RBrace
 	;
 
-typeExpression
-	: prefixTypeOp* errorUnionExpression
-	;
-
-errorUnionExpression
-	: suffixExpression (Bang typeExpression)?
-	;
-
 integerLiteral
 	: Integer
 	;
@@ -523,7 +589,8 @@ lineStringLiteral
 	;
 
 groupedExpression
-	: LParen expression RParen
+	// LPar typeExpression RPar
+	: LPar expression RPar
 	;
 
 fieldInit
@@ -531,19 +598,19 @@ fieldInit
 	;
 
 whileContinueExpression
-	: Colon LParen assignExpression RParen
+	: Colon LPar assignExpression RPar
 	;
 
 linkSection
-	: LinkSection LParen expression RParen
+	: LinkSection LPar expression RPar
 	;
 
 addrSpace
-	: AddrSpace LParen expression RParen
+	: AddrSpace LPar expression RPar
 	;
 
 callConv
-	: CallConv LParen expression RParen
+	: CallConv LPar expression RPar
 	;
 
 
@@ -606,7 +673,7 @@ bitwiseKwExpression
 	;
 
 prefixTypeOp
-	: Question
+	: Quest
 	| AnyFrame MinusArrow
 	| sliceTypeStart
 	  sliceTypeRest*
@@ -634,7 +701,7 @@ sliceTypeRest
 ptrTypeStart
 	: Star
 	| Star Star
-	| LBrack '*' (LetterC | Colon expression)? RBrack
+	| LBrack Star (LetterC | Colon expression)? RBrack
 	;
 
 ptrTypeRest
@@ -654,10 +721,10 @@ suffixOp
 
 // SS 6.7.5.0.1 alignment-specifier
 byteAlign
-	: Align LParen expression RParen
+	: Align LPar expression RPar
 	;
 byteAlign3
-	: Align LParen expression (Colon expression Colon expression)? RParen
+	: Align LPar expression (Colon expression Colon expression)? RPar
 	;
 
 switchProngList
