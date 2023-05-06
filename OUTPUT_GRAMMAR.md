@@ -1,18 +1,24 @@
 The output language is what I call "ZigS" or "ZigEssExpression"
 
+```
 member
-	| `(zig:field fieldAttrs ident type value)
-	| `(zig:test expr block)
-	| `(zig:comptime block)
+	| (zig:field fieldAttrs ident type value)
+	| (zig:test expr block)
+	| (zig:comptime block)
 	| decl
-
+```
 # Example Field:
+```
 (zig:field {} pi f32 3.14)
-	    
+```
+
 # Example Field Attributes:
+```
 (zig:field {bytealign: expr
             comptime: #t} pi f32 ...)
-	    
+```
+
+```
 decl
 	| `(zig:fn fnProtoAttrs ident paramDeclList typeExpr block?)
 	| varDecl
@@ -21,15 +27,21 @@ decl
 varDecl
 	| `(zig:const varAttrs ident type value)
 	| `(zig:var   varAttrs ident type value)
+```
 
 # Example Function Prototype:
+```
 (zig:fn {} greet [] void
   (std.debug.print "Hello, World!" (zig:dot {}))))
+```
 
 # Example Constant Declaration:
+```
 (zig:const {} std None (@import "std"))
+```
 
 # Example Function Prototype Attributes:
+```
 (zig:fn {addrspace: expr
          bytealign: expr
 	 linksection: expr
@@ -38,14 +50,18 @@ varDecl
 	 extern: expr
 	 inline: #t
 	 noinline: #t} greet [] void ...)
+```
 
 # Example Constant Declaration Attributes:
+```
 (zig:const {addrspace: expr
             bytealign: expr
 	    linksection: expr
 	    export: #t
             extern: #t} pi f64 ...)
+```
 
+```
 stmt
 	| varDecl
 	| ( (zig:comptime varDecl)
@@ -61,8 +77,10 @@ stmt
 	  | (zig:while-stmt confExpr thenStmt elseStmt)
 	  | (zig:block-stmt
 	  | (zig:= blockExprStmt))
-	
+```
 
+
+```
 expr
 	| (or expr ...)
 	| (and expr ...)
@@ -142,7 +160,7 @@ expr
 	  | "..."
 	  | (zig:switch-expr expr prong ...)	  
 	)
-	
+```	
 	  
 	  
 
