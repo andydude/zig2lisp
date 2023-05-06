@@ -8,7 +8,8 @@ The following file can be found in `t/hello_world.zig`
 ```zig
 const std = @import("std");
 pub fn main() void {
-    std.debug.print("Hello, World!\n", .{});
+    std.debug.print(
+	    "Hello, World!\n", .{});
 }
 ```
 
@@ -20,9 +21,9 @@ $ zig2lisp t/hello_world.zig
 
 ```lisp
 (zig:members
-  (zig:const {} std None (@import "std"))
-  (zig:fn main None void
+  (zig:const std (@import "std"))
+  (zig:fn main #() void
     ((zig:dot std debug print)
       "Hello, World!\n"
-      (zig:curlysuffix))))
+      (zig:dot #()))))
 ```
