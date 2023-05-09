@@ -3,7 +3,7 @@ options { tokenVocab = ZigLexer; }
 
 // Non-standard
 start
-	: containerUnit
+	: Ws* ContainerDocComment* containerUnit
 	;
 
 // SS 6.5.1.0.1 primary-expression
@@ -11,10 +11,10 @@ primaryTypeExpression
 	: AnyFrame
 	| Unreachable
 	| typeName
-	| constantExpression // C-expression-like
+	| constantExpression
 	| groupedExpression
-	| primaryTypeStatement // C-statement-like
-	| primaryTypeDeclaration // C-declaration-like
+	| primaryTypeStatement
+	| primaryTypeDeclaration
 	;
 
 // SS 6.5.1.0.1 primary-expression
@@ -72,12 +72,11 @@ designatorExpression
 
 // Non-standard
 fnCallArguments
-	: LPar argumentExpressionList RPar
+	: LPar argumentExpressionList? RPar
 	;
 
 // SS 6.5.2.0.2 argument-expression-list
 argumentExpressionList
-	// expression? (Comma expression)* Comma?
 	: (expression Comma)* expression
 	;
 
@@ -113,15 +112,45 @@ bitShiftExpression
 	;
 
 additionExpression
-	: multiplyExpression (AdditionOp multiplyExpression)*
+	: multiplyExpression (additionOp multiplyExpression)*
+	;
+
+additionOp
+	: Plus2 	// Increment
+	| Minus2	// Decrement
+	| Plus		// AddWithOverflow
+	| PlusPct  	// WrappingAdd
+	| PlusPipe 	// SaturatingAdd
+	| Minus  	// SubWithOverflow
+	| MinusPct 	// WrappingSub
+	| MinusPipe	// SaturatingSub
 	;
 
 multiplyExpression
-	: prefixExpression (MultiplyOp prefixExpression)*
+	: prefixExpression (multiplyOp prefixExpression)*
+	;
+
+multiplyOp
+	: Pipe2
+	| Star		
+	| Sol
+	| Pct
+	| Star2
+	| StarPct
+	| StarPipe
 	;
 
 prefixExpression
-	: (PrefixOp* | Bang) primaryExpression
+	: (prefixOp* | Bang) primaryExpression
+	;
+
+prefixOp
+	: Tilde
+	| Minus
+	| MinusPct
+	| Amp
+	| Try
+	| Await
 	;
 
 // SS 6.6.0.0.1 constant-expression
@@ -147,7 +176,6 @@ constantExpression
 //    # System.Linq.Expression.ExpressionType.GreaterThanOrEqual
 //    # System.Linq.Expression.ExpressionType.Invoke
 //    # System.Linq.Expression.ExpressionType.Lambda
-//    # System.Linq.Expression.ExpressionType.LeftShift
 //    # System.Linq.Expression.ExpressionType.LessThan
 //    # System.Linq.Expression.ExpressionType.LessThanOrEqual
 //    # System.Linq.Expression.ExpressionType.ListInit
@@ -167,7 +195,6 @@ constantExpression
 //    # System.Linq.Expression.ExpressionType.Parameter
 //    # System.Linq.Expression.ExpressionType.Power
 //    # System.Linq.Expression.ExpressionType.Quote
-//    # System.Linq.Expression.ExpressionType.RightShift
 //    # System.Linq.Expression.ExpressionType.TypeAs
 //    # System.Linq.Expression.ExpressionType.TypeIs
 //    # System.Linq.Expression.ExpressionType.Assign
@@ -181,8 +208,6 @@ constantExpression
 //    # System.Linq.Expression.ExpressionType.Index
 //    # System.Linq.Expression.ExpressionType.Label
 //    # System.Linq.Expression.ExpressionType.RuntimeVariables
-//    # System.Linq.Expression.ExpressionType.Loop
-//    # System.Linq.Expression.ExpressionType.Switch
 //    # System.Linq.Expression.ExpressionType.Throw
 //    # System.Linq.Expression.ExpressionType.Try
 //    # System.Linq.Expression.ExpressionType.Unbox
@@ -201,8 +226,8 @@ constantExpression
 
 // SS 6.7.0.0.1 declaration
 declaration
-	: topFnDefinition
-	| topVarDeclaration
+	: fnProtoDeclTop
+	| varDeclarationTop
 	| UsingNamespace expression Semi
 	;
 
@@ -235,7 +260,7 @@ structOrUnionSpecifier
 
 // SS 6.7.2.1.7 member-declarator-list
 fieldList
-	: (field Comma)* field?
+	: (field Comma)* field
 	;
 
 // SS 6.7.2.1.8 member-declarator
@@ -267,7 +292,7 @@ enumSpecifier
 fnProtoDeclaration
 	: Fn Ident? LPar parameterDeclarationList RPar
 	  fnProtoDeclarationSpecifiers
-	  typeExpression
+	  Bang? typeExpression
 	;
 
 fnProtoDeclarationSpecifiers
@@ -323,25 +348,6 @@ statement
 	: expressionStatement
 	| primaryBlockStatement
 	;
-
-////////////////////////////////////////////////////////////
-// Primary Block Statements
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-// Primary Block Statements
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-// Primary Block Statements
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-// Primary Block Statements
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-// Primary Block Statements
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-// Primary Block Statements
-////////////////////////////////////////////////////////////
 
 // SS 6.8.0.0.3 primary-block
 primaryBlockStatement
@@ -498,7 +504,7 @@ labeledTypeExpression
 	;
 
 loopStatement
-	: Inline (forStatement | whileStatement)
+	: Inline? (forStatement | whileStatement)
 	;
 
 loopExpression
@@ -506,7 +512,7 @@ loopExpression
 	;
 
 loopTypeExpression
-	: Inline (forTypeExpression | whileTypeExpression)
+	: Inline? (forTypeExpression | whileTypeExpression)
 	;
 
 forStatement
@@ -589,7 +595,6 @@ lineStringLiteral
 	;
 
 groupedExpression
-	// LPar typeExpression RPar
 	: LPar expression RPar
 	;
 
@@ -648,7 +653,7 @@ forArgumentsList
 	;
 
 forItem
-	: expression //(Dot2 expression?)?
+	: expression (Dot2 expression?)?
 	;
 
 // Operators
@@ -700,7 +705,7 @@ sliceTypeRest
 
 ptrTypeStart
 	: Star
-	| Star Star
+	| Star2
 	| LBrack Star (LetterC | Colon expression)? RBrack
 	;
 
@@ -737,12 +742,12 @@ stringList
 
 // Non-standard
 containerUnit
-	: ContainerDocComment* containerMembers
+	: containerMembers
 	;
 
 // SS 6.9.0.0.1 translation-unit
 containerMembers
-	: fieldList
+	: fieldList?
 	  containerDeclarationList*
 	;
 
@@ -754,10 +759,10 @@ containerDeclarationList
 	;
 
 // SS 6.9.1.0.1 function-definition
-topFnDefinition
+fnProtoDeclTop
 	: fnProtoDeclarationEx? fnProtoDeclaration (Semi | block)
 	;
-topVarDeclaration
+varDeclarationTop
 	: varDeclarationEx? ThreadLocal? varDeclaration
 	;
 

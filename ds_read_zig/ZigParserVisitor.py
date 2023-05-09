@@ -124,13 +124,28 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ZigParser#additionOp.
+    def visitAdditionOp(self, ctx:ZigParser.AdditionOpContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by ZigParser#multiplyExpression.
     def visitMultiplyExpression(self, ctx:ZigParser.MultiplyExpressionContext):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by ZigParser#multiplyOp.
+    def visitMultiplyOp(self, ctx:ZigParser.MultiplyOpContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by ZigParser#prefixExpression.
     def visitPrefixExpression(self, ctx:ZigParser.PrefixExpressionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ZigParser#prefixOp.
+    def visitPrefixOp(self, ctx:ZigParser.PrefixOpContext):
         return self.visitChildren(ctx)
 
 
@@ -664,13 +679,13 @@ class ZigParserVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#topFnDefinition.
-    def visitTopFnDefinition(self, ctx:ZigParser.TopFnDefinitionContext):
+    # Visit a parse tree produced by ZigParser#fnProtoDeclTop.
+    def visitFnProtoDeclTop(self, ctx:ZigParser.FnProtoDeclTopContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ZigParser#topVarDeclaration.
-    def visitTopVarDeclaration(self, ctx:ZigParser.TopVarDeclarationContext):
+    # Visit a parse tree produced by ZigParser#varDeclarationTop.
+    def visitVarDeclarationTop(self, ctx:ZigParser.VarDeclarationTopContext):
         return self.visitChildren(ctx)
 
 

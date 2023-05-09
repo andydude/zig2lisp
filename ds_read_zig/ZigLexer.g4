@@ -76,37 +76,39 @@ Equal		: '=' ;
 Equal2		: '==' ;
 EqualArrow 	: '=>' ;
 Esc		: '\\' ;
+Minus2   	: '--' ;
 Minus   	: '-' ;
 MinusArrow 	: '->' ;
 MinusPct	: '-%' ;
 MinusPipe	: '-|' ;
 Pct	    	: '%' ;
-Pipe    	: '|' ;
 Pipe2    	: '||' ;
+Pipe    	: '|' ;
+Plus2		: '++' ;
 Plus		: '+' ;
 PlusPct		: '+%' ;
 PlusPipe	: '+|' ;
 Quest   	: '?' ;
 Semi		: ';' ;
 Sol		: '/' ;
-Star    	: '*' ;
 Star2    	: '**' ;
 StarPct    	: '*%' ;
 StarPipe    	: '*|' ;
+Star    	: '*' ;
 Tilde   	: '~' ;
 
 fragment Apos 
 	: '\u0027' ;
 fragment Quot
 	: '"' ;
-fragment Sol2
-	: '//' ;
-fragment Sol3
-	: '///' ;
-fragment Sol4
-	: '////' ;
 fragment Sol2Bang
 	: '//!' ;
+fragment Sol4
+	: '////' ;
+fragment Sol3
+	: '///' ;
+fragment Sol2
+	: '//' ;
 
 AssignOp
 	: '*='
@@ -146,36 +148,6 @@ BitShiftOp
 	: '<<'
 	| '>>'
 	| '<<|'
-	;
-
-AdditionOp
-	: '++'		// Increment
-	| '--'		// Decrement
-	| Plus		// AddWithOverflow
-	| PlusPct  	// WrappingAdd
-	| PlusPipe 	// SaturatingAdd
-	| Minus  	// SubWithOverflow
-	| MinusPct 	// WrappingSub
-	| MinusPipe	// SaturatingSub
-	;
-
-MultiplyOp
-	: Pipe2
-	| Star		
-	| Sol
-	| Pct
-	| Star2
-	| StarPct
-	| StarPipe
-	;
-
-PrefixOp
-	: Tilde
-	| Minus
-	| MinusPct
-	| Amp
-	| Try
-	| Await
 	;
 
 // Identifiers
@@ -218,7 +190,7 @@ SingleString
 // 	;
 
 LineString
-	: ((Esc Esc CommentChar* Vws)+ Hws?)+
+	: ((Esc Esc StringChar* Vws)+ Hws?)+
 	;
 
 fragment Bit
@@ -254,22 +226,35 @@ fragment StringChar
 	;
 
 fragment CommentChar
-	: ~[\n] ;
+	: [\u0001-\u0009\u000b-\uffff] ;
+	//: ~[\n] ;
 
 ContainerDocComment 
-	: Sol2Bang Hws CommentChar* Vws 
+	: Sol2Bang Hws? CommentChar* Vws 
+	;
+
+// It is extremely important that these rules
+// are in this order, because otherwise, the
+// DocComment rule will not be recognized.
+
+fragment Line4Comment 
+	: Sol4 Hws? CommentChar* Vws
 	;
 
 DocComment 
-	: Sol3 Hws CommentChar* Minus? Vws 
+	: Sol3 Hws? CommentChar* Vws 
 	;
 
-LineComment 
-	: Sol2 Hws CommentChar* Vws
-	| Sol4 Hws CommentChar* Vws
+fragment Line2Comment 
+	: Sol2 Hws? CommentChar* Vws
 	;
 
-fragment Vws	: [\n]+ ;
+fragment Vws	: [\r\n]+ ;
 fragment Hws	: [ \t]+ ;
-Ws	: (ContainerDocComment | LineComment | Hws | Vws) -> skip ;
-// End : EOF -> skip ;
+
+Ws	: ( ContainerDocComment 
+	  | Line4Comment 
+	  | DocComment 
+	  | Line2Comment 
+	  | Hws 
+	  | Vws)+ -> skip ;
